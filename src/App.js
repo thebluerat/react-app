@@ -35,7 +35,7 @@ import './App.css';
 class App extends Component {
   constructor(props){
     super(props);
-    this.max_content_id = 3; //UI에 하등 영향을 주지 않기 때문에 state를 사용하지 않고 밖으로 빼준다
+    this.max_content_id = 3; //마지막 id값. UI에 하등 영향을 주지 않기 때문에 state를 사용하지 않고 밖으로 뺌. 사용하면 불필요한 렌더링 발생
     this.state = {
       mode:'welcome',
       selected_content_id:2,
@@ -49,7 +49,7 @@ class App extends Component {
     }//state 값 초기화
   }
 
-  getReadContent(){
+  getReadContent(){ //_content
     var i = 0;
       while(i < this.state.contents.length){
         var data = this.state.contents[i];
@@ -71,7 +71,7 @@ class App extends Component {
       var _content = this.getReadContent();
       _article = <ReadPoem title = {_content.title} desc = {_content.desc}></ReadPoem>;
     } else if(this.state.mode === 'create'){
-      _article = <CreatePoem onSubmit = {function(_title, _desc){
+      _article = <CreatePoem onSubmit = {function(_title, _desc){ //입력값으로 _title, _desc를 받을 때,
         this.max_content_id = this.max_content_id+1;
         
         var newContents = Array.from(this.state.contents);
@@ -89,17 +89,17 @@ class App extends Component {
         UpdatePoem data = {_content} 
         onSubmit = {
           function(_id, _title, _desc){
-            var _contents = Array.from(this.state.contents);
+            var _contents = Array.from(this.state.contents); //원본을 바꾸지 않는 테크닉.
             var i = 0;
-            while(i < _contents.length){
+            while(i < _contents.length){ //선택된 id의 데이터
               if(_contents[i].id === _id){
-                _contents[i] = {id:_id, title:_title, desc:_desc};
+                _contents[i] = {id:_id, title:_title, desc:_desc}; //수정한 값으로 교체
                 break;
               }
               i = i + 1;
             }
             
-            this.setState({
+            this.setState({ //업데이트 끝나고 모드를 read로 바꿔줌 (다른 기능도 마찬가지)
               contents:_contents,
               mode:'read'
             });
@@ -135,11 +135,11 @@ class App extends Component {
         <Control onChangeMode = {function(_mode){
           if(_mode === 'delete'){
             if(window.confirm('Seriously?')){
-              var _contents = Array.from(this.state.contents);
+              var _contents = Array.from(this.state.contents); //setState로 들어가기 때문에 복제해주는 게 더 좋음
               var i = 0;
               while(i < _contents.length){
                 if(_contents[i].id === this.state.selected_content_id){
-                  _contents.splice(i,1);
+                  _contents.splice(i,1); //원소의 id 값부터 1개를 지우겠다
                   break;
                 }
                 i = i + 1;

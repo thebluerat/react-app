@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import App from '../App';
 
 class UpdatePoem extends Component {
-  constructor(props){
+  constructor(props){//props 대신 state 값을 쓰려고 ..
     super(props);
     
     this.state = {
@@ -38,8 +38,8 @@ class UpdatePoem extends Component {
               type = "text" 
               name = "title" 
               placeholder = "title"
-              value = {this.state.title}
-              onChange = {this.inputFormHandler}
+              value = {this.state.title} //value값으로 props를 쓰면 read only이기 때문에 수정이 안 된다. 가변적인 state값으로 바꿈.
+              onChange = {this.inputFormHandler} //onChange가 있어야 내용을 바꿀 수 있어!
               ></input>
             </p>
             <p>
