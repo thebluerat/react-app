@@ -2,3 +2,22 @@
 예를 들어 <head></head>태그가 있으면 <body></body> 태그는 다른 컴포넌트로 만들어야 한다!
 
 props는 속성이라고 생각하자.
+
+이 앱의 문제점
+
+--삭제
+1. 항목을 선택하지 않고 삭제하기를 누르면 selected_content_id로 설정한 두 번째 항목이 삭제됨
+ -> selected_content_id:2를 selected_content_id:0으로 바꾸고, this.state.selected_content_id==0일 경우 "선택된 항목이 없습니다" alert을 띄움
+
+2. 항목이 없는 경우에도 삭제 과정이 진행됨
+ -> else if(this.state.contents.length == 0){
+              alert("항목이 존재하지 않습니다");
+            }
+
+
+--수정
+1. 항목이 없을 때 수정하면 에러가 남
+2. 선택한 항목이 없을 때도 에러가 남
+
+--하고 싶은 것
+1. 데이터베이스에 데이터 저장하기

@@ -38,7 +38,7 @@ class App extends Component {
     this.max_content_id = 3; //마지막 id값. UI에 하등 영향을 주지 않기 때문에 state를 사용하지 않고 밖으로 뺌. 사용하면 불필요한 렌더링 발생
     this.state = {
       mode:'welcome',
-      selected_content_id:2,
+      selected_content_id:0,
       subject:{title:'시 외우기', sub: '시 하나쯤 외워서 내 생각으로 만들자'},
       welcome:{title:'시 외우기', desc: '외우고 싶은 시를 골라서 적어보세요'},
       contents:[
@@ -70,6 +70,8 @@ class App extends Component {
     } else if (this.state.mode === 'read'){
       var _content = this.getReadContent();
       _article = <ReadPoem title = {_content.title} desc = {_content.desc}></ReadPoem>;
+      
+      // 생성
     } else if(this.state.mode === 'create'){
       _article = <CreatePoem onSubmit = {function(_title, _desc){ //입력값으로 _title, _desc를 받을 때,
         this.max_content_id = this.max_content_id+1;
@@ -83,6 +85,8 @@ class App extends Component {
           selected_content_id:this.max_content_id
         });
       }.bind(this)}></CreatePoem>
+
+      // 수정
     } else if(this.state.mode === 'update'){
       var _content = this.getReadContent();
       _article = <
@@ -132,24 +136,36 @@ class App extends Component {
         data = {this.state.contents}
         >
         </Poems>
+
+        {/* 삭제 */}
         <Control onChangeMode = {function(_mode){
           if(_mode === 'delete'){
-            if(window.confirm('Seriously?')){
-              var _contents = Array.from(this.state.contents); //setState로 들어가기 때문에 복제해주는 게 더 좋음
-              var i = 0;
-              while(i < _contents.length){
-                if(_contents[i].id === this.state.selected_content_id){
-                  _contents.splice(i,1); //원소의 id 값부터 1개를 지우겠다
-                  break;
+
+            if(this.state.selected_content_id == 0){
+              alert("선택된 항목이 없습니다");
+            }else if(this.state.contents.length == 0){
+              alert("항목이 존재하지 않습니다");
+            }else{
+
+                if(window.confirm('Seriously?')){
+                  var _contents = Array.from(this.state.contents); //setState로 들어가기 때문에 복제해주는 게 더 좋음
+                  var i = 0;
+                  while(i < _contents.length){
+                    if(_contents[i].id === this.state.selected_content_id){
+                      _contents.splice(i,1); //원소의 id 값부터 1개를 지우겠다
+                      break;
+                    }
+                    i = i + 1;
+                  }
+                  this.setState({
+                    mode:'welcome',
+                    contents:_contents
+                  });
+                  alert('삭제되었습니당');
                 }
-                i = i + 1;
-              }
-              this.setState({
-                mode:'welcome',
-                contents:_contents
-              });
-              alert('삭제되었습니당');
+
             }
+
           } else{
             this.setState({
               mode:_mode
